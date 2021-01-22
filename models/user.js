@@ -1,29 +1,29 @@
 const mongoose = require('mongoose');
 const { default: validator } = require('validator');
+const mess = require('../configs/message');
 
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
-    required: [true, 'поле "email" должно быть заполнено'],
+    required: [true, mess.EMAIL_REQUIRED],
     validate: {
       validator(v) {
         return validator.isEmail(v);
       },
-      message: 'Неверный формат!',
+      message: mess.ERR_FORMAT,
     },
     unique: true,
   },
   password: {
     type: String,
-    required: [true, 'поле "password" должно быть заполнено'],
-    minlength: [8, 'минимальная длина поля "password" - 8'],
+    required: [true, mess.PASSWORD_REQUIRED],
     select: false,
   },
   name: {
     type: String,
-    required: [true, 'поле "password" должно быть заполнено'],
-    minlength: [2, 'минимальная длина поля "name" - 2'],
-    maxlength: [30, 'максимальная длина поля "name" - 30'],
+    required: [true, mess.NAME_REQUIRED],
+    minlength: [2, mess.NAME_MIN],
+    maxlength: [30, mess.NAME_MAX],
   },
 });
 

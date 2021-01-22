@@ -1,44 +1,45 @@
 const mongoose = require('mongoose');
+const mess = require('../configs/message');
 
 const articleSchema = new mongoose.Schema({
   keyword: {
     type: String,
-    required: [true, 'поле "keyword" должно быть заполнено'],
+    required: [true, mess.KEYWORD_REQUIRED],
   },
   title: {
     type: String,
-    required: [true, 'поле "title" должно быть заполнено'],
+    required: [true, mess.TITLE_REQUIRED],
   },
   text: {
     type: String,
-    required: [true, 'поле "text" должно быть заполнено'],
+    required: [true, mess.TEXT_REQUIRED],
   },
   date: {
     type: String,
-    required: [true, 'поле "date" должно быть заполнено'],
+    required: [true, mess.DATE_REQUIRED],
   },
   source: {
     type: String,
-    required: [true, 'поле "source" должно быть заполнено'],
+    required: [true, mess.SOURCE_REQUIRED],
   },
   link: {
     type: String,
-    required: [true, 'поле "link" должно быть заполнено'],
+    required: [true, mess.LINK_REQUIRED],
     validate: {
       validator(v) {
-        return v.match(/^https?:\/{2}[w{3}\\.]{0,1}[^\\/][\w\W]{1,}#?$/gi);
+        return v.match(/^https?:\/{2}[w{3}\\.]{0,1}[^\\/@/s._~:/?#\\[\]@!$&'()*+,;=][\w\W]{1,}#?$/gi);
       },
-      message: 'Неверный формат!',
+      message: mess.ERR_FORMAT,
     },
   },
   image: {
     type: String,
-    required: [true, 'поле "image" должно быть заполнено'],
+    required: [true, mess.IMAGE_REQUIRED],
     validate: {
       validator(v) {
-        return v.match(/^https?:\/{2}[w{3}\\.]{0,1}[^\\/][\w\W]{1,}#?$/gi);
+        return v.match(/^https?:\/{2}[w{3}\\.]{0,1}[^\\/@/s._~:/?#\\[\]@!$&'()*+,;=][\w\W]{1,}#?$/gi);
       },
-      message: 'Неверный формат!',
+      message: mess.ERR_FORMAT,
     },
   },
   owner: {

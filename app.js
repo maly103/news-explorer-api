@@ -7,7 +7,8 @@ const helmet = require('helmet');
 const mongoose = require('mongoose');
 const routerAll = require('./routers/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const limit = require('./middlewares/limit');
+const { limit } = require('./middlewares/limit');
+const { err } = require('./middlewares/err');
 
 const { PORT, DB_URL } = require('./configs/index');
 
@@ -20,7 +21,7 @@ mongoose.connect(DB_URL, {
 });
 
 app.use(cors());
-app.use(rateLimiter(limit));
+
 app.use(helmet());
 app.use(bodyParser.json());
 
@@ -28,20 +29,9 @@ app.use(requestLogger);
 app.use('/', routerAll);
 app.use(errorLogger);
 
+app.use(rateLimiter(limit));
 app.use(errors());
 
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-  res.status(statusCode).send({
-    message: statusCode === 500
-      ? 'На сервере произошла ошибка'
-      : message,
-  });
-  next();
-});
+app.use(err);
 
-app.listen(PORT, () => {
-  /* eslint-disable no-console */
-  console.log(`App listening on port ${PORT}`);
-  /* eslint-enable no-console */
-});
+app.listen(PORT, () => {});
