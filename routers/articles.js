@@ -1,5 +1,7 @@
 const router = require('express').Router();
+const validator = require('validator');
 const { celebrate, Joi } = require('celebrate');
+const mess = require('../configs/message');
 const {
   getArticles,
   createArticle,
@@ -13,10 +15,18 @@ const validateArticle = celebrate({
     text: Joi.string().required(),
     date: Joi.string().required(),
     source: Joi.string().required(),
-    link: Joi.string()
-      .pattern(/^https?:\/{2}[w{3}\\.]{0,1}[^\\/@/s._~:/?#\\[\]@!$&'()*+,;=][\w\W]{1,}#?$/),
-    image: Joi.string()
-      .pattern(/^https?:\/{2}[w{3}\\.]{0,1}[^\\/@/s._~:/?#\\[\]@!$&'()*+,;=][\w\W]{1,}#?$/),
+    link: Joi.string().custom((value, helper) => {
+      if (validator.isURL(value)) {
+        return value;
+      }
+      return helper.message(mess.ERR_FORMAT);
+    }),
+    image: Joi.string().custom((value, helper) => {
+      if (validator.isURL(value)) {
+        return value;
+      }
+      return helper.message(mess.ERR_FORMAT);
+    }),
   }),
 });
 

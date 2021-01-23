@@ -8,13 +8,7 @@ const message = require('../configs/message');
 
 module.exports.getArticles = (req, res, next) => {
   Article.find({ owner: req.user._id })
-    .then((data) => res.send(
-      data.map((article) => {
-        const item = article.toObject();
-        delete item.owner;
-        return item;
-      }),
-    ))
+    .then((data) => res.send(data))
     .catch((err) => {
       if (err.name === 'DocumentNotFoundError') {
         next(new NotFoundError(message.NOTFOUND_RESURS));
@@ -46,7 +40,9 @@ module.exports.createArticle = (req, res, next) => {
       });
     })
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError' || err.name === 'Error') {
+      if (err.kind === 'ObjectId') {
+        next(new ValidationError(message.NOT_OBJECTID));
+      } else if (err.name === 'ValidationError' || err.name === 'CastError' || err.name === 'Error') {
         next(new ValidationError(`${Object.values(err.errors).map((error) => error.message).join(', ')}`));
       } else if (err.name === 'DocumentNotFoundError') {
         next(new NotFoundError(message.NOTFOUND_RESURS));

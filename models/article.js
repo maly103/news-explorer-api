@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const valid = require('validator');
 const mess = require('../configs/message');
 
 const articleSchema = new mongoose.Schema({
@@ -27,7 +28,7 @@ const articleSchema = new mongoose.Schema({
     required: [true, mess.LINK_REQUIRED],
     validate: {
       validator(v) {
-        return v.match(/^https?:\/{2}[w{3}\\.]{0,1}[^\\/@/s._~:/?#\\[\]@!$&'()*+,;=][\w\W]{1,}#?$/gi);
+        return valid.isURL(v);
       },
       message: mess.ERR_FORMAT,
     },
@@ -37,7 +38,7 @@ const articleSchema = new mongoose.Schema({
     required: [true, mess.IMAGE_REQUIRED],
     validate: {
       validator(v) {
-        return v.match(/^https?:\/{2}[w{3}\\.]{0,1}[^\\/@/s._~:/?#\\[\]@!$&'()*+,;=][\w\W]{1,}#?$/gi);
+        return valid.isURL(v);
       },
       message: mess.ERR_FORMAT,
     },
@@ -46,7 +47,7 @@ const articleSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: 'user',
-
+    select: false,
   },
 });
 module.exports = mongoose.model('article', articleSchema);

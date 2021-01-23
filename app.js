@@ -7,7 +7,7 @@ const helmet = require('helmet');
 const mongoose = require('mongoose');
 const routerAll = require('./routers/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const { limit } = require('./middlewares/limit');
+const { limiter } = require('./middlewares/limit');
 const { err } = require('./middlewares/err');
 
 const { PORT, DB_URL } = require('./configs/index');
@@ -26,10 +26,10 @@ app.use(helmet());
 app.use(bodyParser.json());
 
 app.use(requestLogger);
+app.use(rateLimiter(limiter));
 app.use('/', routerAll);
 app.use(errorLogger);
 
-app.use(rateLimiter(limit));
 app.use(errors());
 
 app.use(err);

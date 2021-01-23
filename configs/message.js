@@ -6,7 +6,7 @@ module.exports.NOT_ACCSES = 'Доступ запрещен';
 module.exports.NOT_OBJECTID = 'Индентификатор не найден';
 module.exports.DATA_EXISTS = 'Данные уже есть';
 module.exports.WRON_LOGIN = 'Неправильные почта или пароль';
-module.exports.ART_DELETE = 'Неправильные почта или пароль';
+module.exports.ART_DELETE = 'Статья успешно удалена';
 module.exports.ERR_SERVER = 'На сервере произошла ошибка';
 
 // model article

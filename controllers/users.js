@@ -25,7 +25,9 @@ module.exports.createUser = (req, res, next) => {
         },
       ))
       .catch((err) => {
-        if (err.name === 'ValidationError' || err.name === 'CastError' || err.name === 'Error') {
+        if (err.kind === 'ObjectId') {
+          next(new ValidationError(message.NOT_OBJECTID));
+        } else if (err.name === 'ValidationError' || err.name === 'CastError' || err.name === 'Error') {
           next(new ValidationError(`${Object.values(err.errors).map((error) => error.message).join(', ')}`));
         } else if (err.name === 'DocumentNotFoundError') {
           next(new NotFoundError(message.NOTFOUND_RESURS));
