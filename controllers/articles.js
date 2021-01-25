@@ -57,7 +57,7 @@ module.exports.createArticle = (req, res, next) => {
 };
 
 module.exports.deleteArticle = (req, res, next) => {
-  Article.findById(req.params.articleId)
+  Article.findById(req.params.articleId).select('+owner')
     .orFail(() => {
       throw new NotFoundError(message.NOTFOUND_RESURS);
     })
