@@ -30,6 +30,7 @@ module.exports.createArticle = (req, res, next) => {
   })
     .then((article) => {
       res.send({
+        _id: article.id,
         keyword: article.keyword,
         title: article.title,
         text: article.text,
@@ -67,7 +68,7 @@ module.exports.deleteArticle = (req, res, next) => {
       }
       Article.findByIdAndRemove(req.params.articleId)
         .then((art) => {
-          res.status(200).send({ message: message.ART_DELETE, title: art.title });
+          res.status(200).send({ message: message.ART_DELETE, art });
         })
         .catch(next);
     })
