@@ -56,7 +56,10 @@ module.exports.login = (req, res, next) => {
             throw new ErrorAuth(message.WRON_LOGIN);
           }
           const token = getJwtToken(user._id);
-          res.send({ token });
+          res.send({
+            token,
+            name: user.name,
+          });
         })
         .catch(next);
     })
@@ -73,6 +76,7 @@ module.exports.getUserMe = (req, res, next) => {
       res.send({
         email: data.email,
         name: data.name,
+        password: data.password,
       });
     })
     .catch(next);
